@@ -28,8 +28,15 @@ const manipulateTodo = (function(){
         updateSubArr();
     }
     //Edit tood item, public method
-    function editTodo(todoItemIndex, title, description, dueDate, priority, notes, checklist) {
-        allTodoItems[todoItemIndex] = {title, description, dueDate, priority, notes, checklist};
+    function editTodo(todoItemIndex, title, description, dueDate, priority, notes) {
+        allTodoItems[todoItemIndex] = {title, description, dueDate, priority, notes};
+
+        updateSubArr();
+    }
+
+    function checkTodo(todoItemIndex){
+        allTodoItems[todoItemIndex].checklist === true?
+            allTodoItems[todoItemIndex].checklist = false: allTodoItems[todoItemIndex].checklist = true;
 
         updateSubArr();
     }
@@ -49,22 +56,48 @@ const manipulateTodo = (function(){
         completedTodo = allTodoItems.filter((todoItem) => todoItem.checklist === true);
     }
 
-    function getList() {
-        return allTodoItems;
-    }
-
     return {
         createNewTodo,
         editTodo,
+        checkTodo,
         deleteTodo,
-        getList,
     }
-
 })();
 
 
+const todosContent = document.querySelector("div#todos"); 
+
 //Create a module for adding DOM to the page
 const manipulateDOM = (function() {
+    function displayTodos(listArr) {
+        //Clear page first
+        todosContent.textContent = "";
+        listArr.forEach((todoItem) => {
+            const itemBox = document.createElement("div");
+            itemBox.classList.add("itemBox");
+            todosContent.appendChild(itemBox);
 
+            const checkbox = document.createElement("input");
+            checkbox.setAttribute("type","checkbox");
+            todoItem.checklist === true? checkbox.checked = true: checkbox.checked = false;
 
+            const todoTitle = document.createElement("h3");
+            todoTitle.textContent = todoItem.title;
+
+            const todoDueDate = document.createElement("p");
+            todoDueDate.textContent = todoItem.dueDate;
+
+            const editButton = document.createElement("button");
+            editButton.appendChild(document.createElement("img"));
+
+            const deleteButton = document.createElement("button");
+            deleteButton.appendChild(document.createElement("img"));
+
+            itemBox.append(checkbox, todoTitle, todoDueDate, editButton, deleteButton);
+        })
+    }
+
+        return {
+            displayTodos,
+        }
 })();
