@@ -1,10 +1,11 @@
+//This js file will contain a module that keeps track of the todo item info in the dashboard
 import {isToday, parse} from "date-fns";
 
-export {manipulateTodo}; 
+export {manipulateTodo, manipulateDOM}; 
 
 //Create a module for creating new todo items object
 //todo-items should have a title, description, dueDate and priority, notes
-const manipulateTodo = (function(){
+function manipulateTodo () {
     let allTodoItems = [];
     //The arrays below should always be a sub-array of allTodoItems
     //They can be updated by sorting whenever there is an update on allTodoItems
@@ -23,29 +24,21 @@ const manipulateTodo = (function(){
             notes, //string type
             checklist //boolean type: true/ false
         };
-        allTodoItems.push(newTodo);    
-        
-        updateSubArr();
+        allTodoItems.push(newTodo);
     }
     //Edit tood item, public method
     function editTodo(todoItemIndex, title, description, dueDate, priority, notes) {
         allTodoItems[todoItemIndex] = {title, description, dueDate, priority, notes};
-
-        updateSubArr();
     }
 
     function checkTodo(todoItemIndex){
         allTodoItems[todoItemIndex].checklist === true?
             allTodoItems[todoItemIndex].checklist = false: allTodoItems[todoItemIndex].checklist = true;
-
-        updateSubArr();
     }
 
     //Delete todo item, public method
     function deleteTodo(todoItemIndex) {
         allTodoItems.splice(todoItemIndex, 1);
-
-        updateSubArr();
     }
 
     //Update subarrays according to allTodoItems, private method
@@ -62,13 +55,12 @@ const manipulateTodo = (function(){
         checkTodo,
         deleteTodo,
     }
-})();
+}
 
-
-const todosContent = document.querySelector("div#todos"); 
 
 //Create a module for adding DOM to the page
-const manipulateDOM = (function() {
+function manipulateDOM() {
+    const todosContent = document.querySelector("div#todos"); 
     function displayTodos(listArr) {
         //Clear page first
         todosContent.textContent = "";
@@ -100,4 +92,5 @@ const manipulateDOM = (function() {
         return {
             displayTodos,
         }
-})();
+};
+

@@ -1,5 +1,8 @@
-import { manipulateTodo } from "./scripts";
+import { manipulateTodo, manipulateDOM } from "./scripts";
+
+//Create an instance of the imported object/ module for initialisation
+
+const todoManipulator = manipulateTodo();
+const domManipulator = manipulateDOM();
 
 
-manipulateTodo.createNewTodo("hi","hi","2025-01-01","High","hi",true);
-console.log(manipulateTodo.getList());
