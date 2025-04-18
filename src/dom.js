@@ -5,10 +5,10 @@ export {dashboardDOM, formDOM};
 function dashboardDOM() {
     const todosContent = document.querySelector("div#todos");
 
-    function displayTodos(listArr) {
+    function displayTodos(todoArr) {
         //Clear page first
         todosContent.textContent = "";
-        listArr.forEach((todoItem) => {
+        todoArr.forEach((todoItem) => {
             const itemBox = document.createElement("div");
             itemBox.classList.add("itemBox");
             todosContent.appendChild(itemBox);
@@ -94,7 +94,20 @@ function formDOM() {
         priorityLabel.textContent = "Priority:";
         priorityWrapper.append(priorityLabel, priorityInput);
 
-        dialog.append(titleWrapper, descriptionWrapper, ddWrapper, priorityWrapper);
+        const buttonsWrapper = document.createElement("div");
+        const cancelBtn = document.createElement("button");
+        cancelBtn.classList.add("formBtns");
+        cancelBtn.setAttribute("id","cancelBtn");
+        cancelBtn.setAttribute("type","button");
+        cancelBtn.textContent = "Cancel";
+        const submitBtn = document.createElement("button");
+        submitBtn.classList.add("formBtns");
+        submitBtn.setAttribute("type","submit");
+        submitBtn.textContent = "Add Task";
+        buttonsWrapper.append(cancelBtn, submitBtn);
+
+        form.append(titleWrapper, descriptionWrapper, ddWrapper, priorityWrapper, buttonsWrapper);
+        dialog.appendChild(form);
         ui.appendChild(dialog);
     }
 

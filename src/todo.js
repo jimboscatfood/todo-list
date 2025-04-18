@@ -15,13 +15,13 @@ function manipulateTodo () {
     let completedTodo = [];
 
     //Create new todo item, public method
-    function createNewTodo(title, description, dueDateInput, priority, checklist) {
+    function createNewTodo(title, description, dueDate, priority) {
         const newTodo = {
             title, //string type
             description, //string
-            dueDate: parse(dueDateInput,'yyyy-LL-d', new Date()), //date (string type)
+            dueDate, //date (string type)
             priority, //string type
-            checklist //boolean type: true/ false
+            checklist: undefined,//boolean type: true/ false
         };
         allTodoItems.push(newTodo);
     }
@@ -53,12 +53,15 @@ function manipulateTodo () {
         completedTodo = allTodoItems.filter((todoItem) => todoItem.checklist === true);
     }
 
+    const getAllTodo = () => allTodoItems;
+
     return {
         createNewTodo,
         editTodo,
         checkTodo,
         deleteTodo,
-        updateArr
+        updateArr,
+        getAllTodo,
     }
 }
 
