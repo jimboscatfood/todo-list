@@ -6,7 +6,7 @@ function manipulateProjects() {
     function createProject(projectName) {
         const newProject = {
             name: projectName,
-            todo:{},
+            todo:[],
             projectIndex: (projects.length),
         }
 
@@ -19,6 +19,10 @@ function manipulateProjects() {
         projects.forEach((project, index) => {
             project.projectIndex = index;
         });
+    }
+
+    function addTodoToProject (allTodoArr) {
+        
     }
 
     const getProjectList = () => projects;

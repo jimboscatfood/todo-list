@@ -95,6 +95,19 @@ function formDOM() {
         priorityLabel.textContent = "Priority:";
         priorityWrapper.append(priorityLabel, priorityInput);
 
+        //Add selection of options of projects for todo items to be added
+        const projectWrapper = document.createElement("p");
+        const projectLabel = document.createElement("label");
+        const projectInput = document.createElement("select");
+        projectInput.setAttribute("id","project");
+        projectInput.setAttribute("name","project");
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        projectInput.appendChild(defaultOption);
+        projectLabel.setAttribute("for","project");
+        projectLabel.textContent = "Project:";
+        projectWrapper.append(projectLabel, projectInput);
+
         const buttonsWrapper = document.createElement("div");
         const cancelBtn = document.createElement("button");
         cancelBtn.classList.add("formBtns");
@@ -107,19 +120,26 @@ function formDOM() {
         submitBtn.textContent = "Add Task";
         buttonsWrapper.append(cancelBtn, submitBtn);
 
-        form.append(titleWrapper, descriptionWrapper, ddWrapper, priorityWrapper, buttonsWrapper);
+        form.append(titleWrapper, descriptionWrapper, ddWrapper, priorityWrapper, projectWrapper, buttonsWrapper);
         dialog.appendChild(form);
         ui.appendChild(dialog);
     }
 
-    return {
-        addFormDOM,
+    //retrieve the existing projects array and feed it back to this function to update the projection selection box
+    function updateFormDOM(existingProjects) {
+        const projectInput = document.getElementById("project");
+        projectInput.textContent = "";
+        const defaultOption = document.createElement("option");
+        projectInput.appendChild(defaultOption);
+        for (let i = 0; i < existingProjects.length; i++) {
+            const option = document.createElement("option");
+            option.textContent = existingProjects[i].name;
+            //set a value attribute for each option so this value can be further referenced in the createTodo function
+            option.value = existingProjects[i].projectIndex;
+            projectInput.appendChild(option);
+        }
+
     }
-}
-
-
-function sidebarDOM() {
-    const projectList = document.querySelector(".projects");
 
     function addProjectFormDOM() {
         const dialog = document.createElement("dialog");
@@ -156,6 +176,17 @@ function sidebarDOM() {
         ui.appendChild(dialog);
     }
 
+    return {
+        addFormDOM,
+        addProjectFormDOM,
+        updateFormDOM,
+    }
+}
+
+
+function sidebarDOM() {
+    const projectList = document.querySelector(".projects");
+
     function updateProjectList(projects) {
         const projectList = document.querySelector("ul.projects");
 
@@ -172,7 +203,7 @@ function sidebarDOM() {
     }
 
     return {
-        addProjectFormDOM,
+        
         updateProjectList,
     }
 }

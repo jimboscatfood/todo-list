@@ -12,7 +12,7 @@ const sidebarDOMmanipulator = sidebarDOM();
 
 //add layout DOM
 formDOMmanipulator.addFormDOM();
-sidebarDOMmanipulator.addProjectFormDOM();
+formDOMmanipulator.addProjectFormDOM();
 
 const addTodoBtn = document.querySelector("button#addTodo");
 const addProjectBtn = document.querySelector("button#addProject");
@@ -31,7 +31,7 @@ addProjectBtn.addEventListener("click", () => projectDialog.showModal());
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
     todoManipulator.createNewTodo(...todoFormInput());
-    dashboardDOMmanipulator.displayTodos(todoManipulator.getAllTodo());
+    dashboardDOMmanipulator.displayTodos(todoManipulator.getTodoArr());
     todoForm.reset();
     todoDialog.close();
 })
@@ -51,6 +51,7 @@ projectForm.addEventListener("submit", (e) => {
     projectForm.reset();
     projectDialog.close();
     sidebarDOMmanipulator.updateProjectList(projectManipulator.getProjectList());
+    formDOMmanipulator.updateFormDOM(projectManipulator.getProjectList());
 })
 
 //formEventHandler
@@ -59,8 +60,9 @@ function todoFormInput () {
     const description = document.getElementById("description").value;
     const dueDate = document.getElementById("dd").value;
     const priority = document.getElementById("priority").value;
-    
-    return [title, description, dueDate, priority];
+    const projectIndex = document.getElementById("project").value;
+
+    return [title, description, dueDate, priority,projectIndex];
 }
 
 function projectFormInput () {
