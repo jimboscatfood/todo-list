@@ -10,15 +10,19 @@
     <div id="ui">
         <nav>
             <ul class="default">
-                <li><button>All</button></li>
-                <li><button>Today</button></li>
-                <li><button>Scheduled</button></li>
-                <li><button>Important</button></li>
-                <li><button>Completed</button></li>
+                <li><button id="all">All</button></li>
+                <li><button id="today">Today</button></li>
+                <li><button id="scheduled">Scheduled</button></li>
+                <li><button id="important">Important</button></li>
+                <li><button id="completed">Completed</button></li>
             </ul>
-            <ul class="projects">
+            <section>
                 <h2>Projects</h2>
-            </ul>
+                <ul class="projects">
+                    
+                </ul>
+                <button id="addProject">Add Project</button>
+            </section>
             <button id="addTodo">+</button>
         </nav>
         <div id="todos"></div>

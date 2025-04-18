@@ -1,6 +1,6 @@
 //Create a module for adding DOM to the page
 
-export {dashboardDOM, formDOM};
+export {dashboardDOM, formDOM, sidebarDOM};
 
 function dashboardDOM() {
     const todosContent = document.querySelector("div#todos");
@@ -38,15 +38,16 @@ function dashboardDOM() {
         }
 };
 
-function formDOM() {
-    const ui = document.querySelector("div#ui");
+const ui = document.querySelector("div#ui");
 
+function formDOM() {
     //this function add the dialog form to the DOM tree, should only be run once when the webpage first renders
     function addFormDOM() {
         const dialog = document.createElement("dialog");
-        dialog.setAttribute("id","userInput");
+        dialog.setAttribute("id","newTodo");
 
         const form = document.createElement("form");
+        form.classList.add("todoForm");
         form.setAttribute("method","dialog");
         
         const titleWrapper = document.createElement("p");
@@ -61,7 +62,7 @@ function formDOM() {
 
         const descriptionWrapper = document.createElement("p");
         const descriptionLabel = document.createElement("label");
-        const descriptionInput = document.createElement("input")
+        const descriptionInput = document.createElement("input");
         descriptionInput.setAttribute("id","description");
         descriptionInput.setAttribute("name","description");
         descriptionLabel.setAttribute("for","description");
@@ -70,7 +71,7 @@ function formDOM() {
 
         const ddWrapper = document.createElement("p");
         const ddLabel = document.createElement("label");
-        const ddInput = document.createElement("input")
+        const ddInput = document.createElement("input");
         ddInput.setAttribute("id","dd");
         ddInput.setAttribute("name","dd");
         ddInput.setAttribute("type","date");
@@ -80,7 +81,7 @@ function formDOM() {
         
         const priorityWrapper = document.createElement("p");
         const priorityLabel = document.createElement("label");
-        const priorityInput = document.createElement("select")
+        const priorityInput = document.createElement("select");
         priorityInput.setAttribute("id","priority");
         priorityInput.setAttribute("name","priority");
         const priorityOptions = ["", "High", "Medium", "Low"];
@@ -97,7 +98,7 @@ function formDOM() {
         const buttonsWrapper = document.createElement("div");
         const cancelBtn = document.createElement("button");
         cancelBtn.classList.add("formBtns");
-        cancelBtn.setAttribute("id","cancelBtn");
+        cancelBtn.setAttribute("class","cancelBtn");
         cancelBtn.setAttribute("type","button");
         cancelBtn.textContent = "Cancel";
         const submitBtn = document.createElement("button");
@@ -118,5 +119,60 @@ function formDOM() {
 
 
 function sidebarDOM() {
+    const projectList = document.querySelector(".projects");
 
+    function addProjectFormDOM() {
+        const dialog = document.createElement("dialog");
+        dialog.setAttribute("id","newProject");
+
+        const form = document.createElement("form");
+        form.classList.add("projectForm");
+        form.setAttribute("method","dialog");
+        
+        const titleWrapper = document.createElement("p");
+        const titleInput = document.createElement("input");
+        titleInput.setAttribute("id","projectTitle");
+        titleInput.setAttribute("name","projectTitle");
+        titleInput.setAttribute("required","");
+        const titleLabel = document.createElement("label");
+        titleLabel.setAttribute("for","projectTitle");
+        titleLabel.textContent = "Project title:";
+        titleWrapper.append(titleLabel, titleInput);
+
+        const buttonsWrapper = document.createElement("div");
+        const cancelBtn = document.createElement("button");
+        cancelBtn.classList.add("formBtns");
+        cancelBtn.setAttribute("class","cancelBtn");
+        cancelBtn.setAttribute("type","button");
+        cancelBtn.textContent = "Cancel";
+        const submitBtn = document.createElement("button");
+        submitBtn.classList.add("formBtns");
+        submitBtn.setAttribute("type","submit");
+        submitBtn.textContent = "Add Project";
+        buttonsWrapper.append(cancelBtn, submitBtn);
+
+        form.append(titleWrapper, buttonsWrapper);
+        dialog.appendChild(form);
+        ui.appendChild(dialog);
+    }
+
+    function updateProjectList(projects) {
+        const projectList = document.querySelector("ul.projects");
+
+        projectList.textContent = "";
+        
+        for (let i = 0; i < projects.length; i++) {
+            const listItem = document.createElement("li");
+            const button = document.createElement("button");
+            button.textContent = projects[i].name;
+
+            listItem.appendChild(button);
+            projectList.appendChild(listItem);
+        }
+    }
+
+    return {
+        addProjectFormDOM,
+        updateProjectList,
+    }
 }
