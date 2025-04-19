@@ -6,7 +6,7 @@ export {manipulateTodo};
 //Create a module for creating new todo items object
 //todo-items should have a title, description, dueDate and priority
 function manipulateTodo () {
-    let allTodoItems = [];
+    const allTodoItems = [];
     //The arrays below should always be a sub-array of allTodoItems
     //They can be updated by sorting whenever there is an update on allTodoItems
     let todayTodo = [];
@@ -50,16 +50,17 @@ function manipulateTodo () {
         }
         todayTodo = allTodoItems.filter((todoItem) => isToday(todoItem.dueDate));
         scheduledTodo = allTodoItems.filter((todoItem) => todoItem.dueDate !== undefined);
-        importantTodo = allTodoItems.filter((todoItem) => todoItem.priority === "High");
+        importantTodo = allTodoItems.filter((todoItem) => todoItem.priority === "high");
         completedTodo = allTodoItems.filter((todoItem) => todoItem.checklist === true);
     }
 
 
     //
-    function getTodoArr() {
-        return allTodoItems;
-
-    };
+    const getAllTodo = () => allTodoItems;
+    const getTodayTodo = () => todayTodo;
+    const getScheduledTodo = () => scheduledTodo;
+    const getImportantTodo = () => importantTodo;
+    const getCompletedTodo = () => completedTodo;
 
     return {
         createNewTodo,
@@ -67,7 +68,11 @@ function manipulateTodo () {
         checkTodo,
         deleteTodo,
         updateArr,
-        getTodoArr,
+        getAllTodo,
+        getTodayTodo,
+        getScheduledTodo,
+        getImportantTodo,
+        getCompletedTodo,
     }
 }
 

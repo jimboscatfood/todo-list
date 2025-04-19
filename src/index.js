@@ -33,7 +33,6 @@ addProjectBtn.addEventListener("click", () => projectDialog.showModal());
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
     todoManipulator.createNewTodo(...todoFormInput());
-    dashboardDOMmanipulator.displayTodos(todoManipulator.getTodoArr());
     todoForm.reset();
     todoDialog.close();
 })
@@ -72,4 +71,36 @@ function projectFormInput () {
 
     return projectTitle;
 }
+
+//siderbar default project section handler
+const defaultProject = document.querySelector(".default");
+const defaultBtns = defaultProject.querySelectorAll("button");
+
+defaultBtns.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        todoManipulator.updateArr();
+        dashboardDOMmanipulator.displayTodos(retrieveTodoArr(e.target.id));
+    })
+})
+
+
+function retrieveTodoArr (buttonID) {
+    switch (buttonID) {
+        case "all":
+            return todoManipulator.getAllTodo();
+            break;
+        case "today":
+            return todoManipulator.getTodayTodo();
+            break;
+        case "scheduled":
+            return todoManipulator.getScheduledTodo();
+            break;
+        case "important":
+            return todoManipulator.getImportantTodo();
+            break;
+        case "completed":
+            return todoManipulator.getCompletedTodo();
+    }
+}
+
 

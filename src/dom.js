@@ -89,7 +89,7 @@ function formDOM() {
         const priorityOptions = ["", "High", "Medium", "Low"];
         for (let i = 0; i < priorityOptions.length; i++) {
             const option = document.createElement("option");
-            option.value = priorityOptions[i].toLowerCase;
+            option.value = priorityOptions[i].toLowerCase();
             option.textContent = priorityOptions[i];
             priorityInput.appendChild(option);
         }
