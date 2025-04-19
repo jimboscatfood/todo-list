@@ -24,9 +24,11 @@ function dashboardDOM() {
             todoDueDate.textContent = todoItem.dueDate;
 
             const editButton = document.createElement("button");
+            editButton.classList.add("editTodo");
             editButton.appendChild(document.createElement("img"));
 
             const deleteButton = document.createElement("button");
+            deleteButton.classList.add("deleteTodo");
             deleteButton.appendChild(document.createElement("img"));
 
             itemBox.append(checkbox, todoTitle, todoDueDate, editButton, deleteButton);

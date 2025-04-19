@@ -1,3 +1,5 @@
+import "./styles.css";
+
 import { dashboardDOM, formDOM, sidebarDOM } from "./dom";
 import { manipulateTodo } from "./todo";
 import { manipulateProjects } from "./project";
