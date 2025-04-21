@@ -35,6 +35,7 @@ todoForm.addEventListener("submit", (e) => {
     todoManipulator.createNewTodo(...todoFormInput());
     todoForm.reset();
     todoDialog.close();
+    todoManipulator.updateArr();
 })
 const cancelBtns = document.querySelectorAll(".cancelBtn");
 cancelBtns.forEach((button) => { 
@@ -61,7 +62,7 @@ function todoFormInput () {
     const description = document.getElementById("description").value;
     const dueDate = document.getElementById("dd").value;
     const priority = document.getElementById("priority").value;
-    const projectIndex = document.getElementById("project").value;
+    const projectIndex = parseInt(document.getElementById("project").value);
 
     return [title, description, dueDate, priority,projectIndex];
 }
@@ -78,11 +79,9 @@ const defaultBtns = defaultProject.querySelectorAll("button");
 
 defaultBtns.forEach((button) => {
     button.addEventListener("click", (e) => {
-        todoManipulator.updateArr();
         dashboardDOMmanipulator.displayTodos(retrieveTodoArr(e.target.id));
     })
 })
-
 
 function retrieveTodoArr (buttonID) {
     switch (buttonID) {
@@ -101,6 +100,25 @@ function retrieveTodoArr (buttonID) {
         case "completed":
             return todoManipulator.getCompletedTodo();
     }
+}
+
+//siderbar user defined project section handler
+const userProjects = document.querySelector(".projects");
+
+userProjects.addEventListener("click", (e) => {
+    
+    const projectBtns = userProjects.querySelectorAll("button");
+    projectBtns.forEach((button, index) => {
+        if (e.target.tagName === "BUTTON" && e.target === button) {
+            retrieveProjectTodo(index) !== undefined? dashboardDOMmanipulator.displayTodos(retrieveProjectTodo(index)):dashboardDOMmanipulator.displayTodos([]);
+        }
+    })
+})
+//Note that the project buttons are displayed from top down based on their sequence in the project list array
+
+function retrieveProjectTodo(projectIndex) {
+    const projectTodo = todoManipulator.getProjectsTodo();
+    return projectTodo[projectIndex];
 }
 
 

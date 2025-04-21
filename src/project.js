@@ -22,10 +22,11 @@ function manipulateProjects() {
     }
 
     function addTodoToProject (allTodoArr) {
-        
+
     }
 
     const getProjectList = () => projects;
+    
 
     return {
         createProject,

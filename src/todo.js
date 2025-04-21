@@ -9,10 +9,13 @@ function manipulateTodo () {
     const allTodoItems = [];
     //The arrays below should always be a sub-array of allTodoItems
     //They can be updated by sorting whenever there is an update on allTodoItems
+    //these arrays belong to the "default" project
     let todayTodo = [];
     let scheduledTodo = [];
     let importantTodo = [];
     let completedTodo = [];
+    //this array belong to the project with projectIndex assigned
+    let projectsTodo = [];
 
     //Create new todo item, public method
     function createNewTodo(title, description, dueDate, priority, projectIndex) {
@@ -52,6 +55,25 @@ function manipulateTodo () {
         scheduledTodo = allTodoItems.filter((todoItem) => todoItem.dueDate !== undefined);
         importantTodo = allTodoItems.filter((todoItem) => todoItem.priority === "high");
         completedTodo = allTodoItems.filter((todoItem) => todoItem.checklist === true);
+        
+        projectsTodo = [];
+        //FOR each item in the all todo item list
+        for (let j = 0; j < allTodoItems.length; j++) {
+            //IF it has a project index
+            if (allTodoItems[j].projectIndex !== "") {
+                //AND IF there is no array already defined at the index of projectIndex
+                if (projectsTodo[allTodoItems[j].projectIndex] === undefined){
+                    //THEN create an empty array and add it into the projectsTodo array at the index of projectIndex
+                    const subArr = [];
+                    subArr.push(allTodoItems[j]);
+                    projectsTodo.splice(allTodoItems[j].projectIndex,0,subArr);
+                }
+                //ELSE just add it to the array inside of the projectsTodo array
+                else {
+                    projectsTodo[allTodoItems[j].projectIndex].push(allTodoItems[j]);
+                }
+            }
+        }
     }
 
 
@@ -61,6 +83,7 @@ function manipulateTodo () {
     const getScheduledTodo = () => scheduledTodo;
     const getImportantTodo = () => importantTodo;
     const getCompletedTodo = () => completedTodo;
+    const getProjectsTodo = () => projectsTodo;
 
     return {
         createNewTodo,
@@ -73,6 +96,7 @@ function manipulateTodo () {
         getScheduledTodo,
         getImportantTodo,
         getCompletedTodo,
+        getProjectsTodo,
     }
 }
 
