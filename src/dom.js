@@ -1,6 +1,16 @@
 //Create a module for adding DOM to the page
+import manipulateTodo from "./todo";
+export {initialiseDOM, dashboardDOM, formDOM, sidebarDOM};
 
-export {dashboardDOM, formDOM, sidebarDOM};
+function initialiseDOM () {
+    const form = formDOM();    
+    form.addFormDOM();
+    form.addProjectFormDOM();
+
+    const todo = manipulateTodo();
+    const sidebar = sidebarDOM();
+    sidebar.addDefaultProjects(todo.getDefaultProject());
+}
 
 function dashboardDOM() {
     const todosContent = document.querySelector("div#todos");
@@ -34,6 +44,7 @@ function dashboardDOM() {
             itemBox.append(checkbox, todoTitle, todoDueDate, editButton, deleteButton);
         })
     }
+
 
         return {
             displayTodos,
@@ -187,25 +198,38 @@ function formDOM() {
 
 
 function sidebarDOM() {
-    const projectList = document.querySelector(".projects");
+    const defaultProjectList = document.querySelector(".default");
+    const userProjectList = document.querySelector(".projects");
+
+    function addDefaultProjects (defaultProjects) {
+        for (let i = 0; i < defaultProjects.length; i++) {
+            const listItem = document.createElement("li");
+            const button = document.createElement("button");
+            button.classList.add("projectBtn");
+            button.textContent = defaultProjects[i].name;
+
+            listItem.appendChild(button);
+            defaultProjectList.appendChild(listItem);
+        }
+    }
 
     function updateProjectList(projects) {
-        const projectList = document.querySelector("ul.projects");
-
-        projectList.textContent = "";
+        
+        userProjectList.textContent = "";
         
         for (let i = 0; i < projects.length; i++) {
             const listItem = document.createElement("li");
             const button = document.createElement("button");
+            button.classList.add("projectBtn");
             button.textContent = projects[i].name;
 
             listItem.appendChild(button);
-            projectList.appendChild(listItem);
+            userProjectList.appendChild(listItem);
         }
     }
 
     return {
-        
+        addDefaultProjects,
         updateProjectList,
     }
 }

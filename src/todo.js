@@ -1,21 +1,40 @@
 //This js file will contain a module that keeps track of the todo item info in the dashboard
 import {isToday, parse} from "date-fns";
 
-export {manipulateTodo}; 
+export default manipulateTodo; 
 
 //Create a module for creating new todo items object
 //todo-items should have a title, description, dueDate and priority
 function manipulateTodo () {
-    const allTodoItems = [];
-    //The arrays below should always be a sub-array of allTodoItems
-    //They can be updated by sorting whenever there is an update on allTodoItems
-    //these arrays belong to the "default" project
-    let todayTodo = [];
-    let scheduledTodo = [];
-    let importantTodo = [];
-    let completedTodo = [];
-    //this array belong to the project with projectIndex assigned
-    let projectsTodo = [];
+    
+    let defaultProject = [
+        {
+            name: "All",
+            todoItems:[],
+            projectIndex:0,
+        },
+        {
+            name: "Today",
+            todoItems:[],
+            projectIndex:1,
+        },
+        {
+            name: "Scheduled",
+            todoItems:[],
+            projectIndex:2,
+        },
+        {
+            name: "Important",
+            todoItems:[],
+            projectIndex:3,
+        },
+        {
+            name: "Completed",
+            todoItems:[],
+            projectIndex:4,
+        }
+    ];
+    let userProjects = [];
 
     //Create new todo item, public method
     function createNewTodo(title, description, dueDate, priority, projectIndex) {
@@ -25,78 +44,72 @@ function manipulateTodo () {
             dueDate, //date (string type)
             priority, //string type
             projectIndex,
-            checklist: undefined,//boolean type: true/ false
+            checklist: undefined,//boolean type: true/ false,
         };
-        allTodoItems.push(newTodo);
+        defaultProject[0].todoItems.push(newTodo);
     }
     //Edit tood item, public method
     function editTodo(todoItemIndex, title, description, dueDate, priority) {
-        allTodoItems[todoItemIndex] = {title, description, dueDate, priority};
+        
     }
 
     function checkTodo(todoItemIndex){
-        allTodoItems[todoItemIndex].checklist === true?
-            allTodoItems[todoItemIndex].checklist = false: allTodoItems[todoItemIndex].checklist = true;
+        defaultProject[0].todoItems[todoItemIndex].checklist === true?
+            defaultProject[0].todoItems[todoItemIndex].checklist = false:
+            defaultProject[0].todoItems[todoItemIndex].checklist = true;
     }
 
     //Delete todo item from allTodo list, public method
     function deleteTodo(todoItemIndex) {
-        allTodoItems.splice(todoItemIndex, 1);
+        defaultProject[0].todoItems.splice(todoItemIndex, 1);
     }
 
-    //Update allTodoItems array when modified (when new todo item is created or deleted)
-    // and then subarrays according to allTodoItems, private method
-    function updateArr () {
+    //Update defaultProject[0].todoItems. array when modified (when new todo item is created or deleted)
+    // and then subarrays according to defaultProject[0].todoItems., private method
+    function updateTodoLists () {
         //assign index number for identifying each unique item
-        for(let i=0; i<allTodoItems.length; i++) {
-            allTodoItems[i].itemIndex = i;
+        for(let i=0; i<defaultProject[0].todoItems.length; i++) {
+            defaultProject[0].todoItems[i].itemIndex = i;
         }
-        todayTodo = allTodoItems.filter((todoItem) => isToday(todoItem.dueDate));
-        scheduledTodo = allTodoItems.filter((todoItem) => todoItem.dueDate !== undefined);
-        importantTodo = allTodoItems.filter((todoItem) => todoItem.priority === "high");
-        completedTodo = allTodoItems.filter((todoItem) => todoItem.checklist === true);
+        defaultProject[1].todoItems = defaultProject[0].todoItems.filter((todoItem) => isToday(todoItem.dueDate));
+        defaultProject[2].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.dueDate !== undefined);
+        defaultProject[3].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.priority === "high");
+        defaultProject[4].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.checklist === true);
         
-        projectsTodo = [];
+        userProjects = [];
         //FOR each item in the all todo item list
-        for (let j = 0; j < allTodoItems.length; j++) {
+        for (let j = 0; j < defaultProject[0].todoItems.length; j++) {
             //IF it has a project index
-            if (allTodoItems[j].projectIndex !== "") {
+            if (defaultProject[0].todoItems[j].projectIndex !== "") {
                 //AND IF there is no array already defined at the index of projectIndex
-                if (projectsTodo[allTodoItems[j].projectIndex] === undefined){
-                    //THEN create an empty array and add it into the projectsTodo array at the index of projectIndex
+                if (userProjects[defaultProject[0].todoItems[j].projectIndex] === undefined){
+                    //THEN create an empty array and add it into the userProjects array at the index of projectIndex
                     const subArr = [];
-                    subArr.push(allTodoItems[j]);
-                    projectsTodo.splice(allTodoItems[j].projectIndex,0,subArr);
+                    subArr.push(defaultProject[0].todoItems[j]);
+                    userProjects.splice(defaultProject[0].todoItems[j].projectIndex,0,subArr);
                 }
-                //ELSE just add it to the array inside of the projectsTodo array
+                //ELSE just add it to the array inside of the userProjects array
                 else {
-                    projectsTodo[allTodoItems[j].projectIndex].push(allTodoItems[j]);
+                    userProjects[defaultProject[0].todoItems[j].projectIndex].push(defaultProject[0].todoItems[j]);
                 }
             }
         }
     }
+    
+    const getDefaultProject = () => defaultProject;
 
+    const getUserProject = () => userProjects;
 
-    //
-    const getAllTodo = () => allTodoItems;
-    const getTodayTodo = () => todayTodo;
-    const getScheduledTodo = () => scheduledTodo;
-    const getImportantTodo = () => importantTodo;
-    const getCompletedTodo = () => completedTodo;
-    const getProjectsTodo = () => projectsTodo;
+    
 
     return {
         createNewTodo,
         editTodo,
         checkTodo,
         deleteTodo,
-        updateArr,
-        getAllTodo,
-        getTodayTodo,
-        getScheduledTodo,
-        getImportantTodo,
-        getCompletedTodo,
-        getProjectsTodo,
+        updateTodoLists,
+        getDefaultProject,
+        getUserProject,
     }
 }
 
