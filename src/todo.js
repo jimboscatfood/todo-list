@@ -1,7 +1,10 @@
 //This js file will contain a module that keeps track of the todo item info in the dashboard
 import {isToday, parse} from "date-fns";
 
+
 export default manipulateTodo; 
+
+import manipulateProjects from "./project";
 
 //Create a module for creating new todo items object
 //todo-items should have a title, description, dueDate and priority
@@ -37,7 +40,7 @@ function manipulateTodo () {
     let userProjects = [];
 
     //Create new todo item, public method
-    function createNewTodo(title, description, dueDate, priority, projectIndex) {
+    function createNewTodo(title, description, dueDate, priority, projectIndex, existingProjects) {
         const newTodo = {
             title, //string type
             description, //string
@@ -49,26 +52,34 @@ function manipulateTodo () {
         defaultProject[0].todoItems.push(newTodo);
     }
     //Edit tood item, public method
-    function editTodo(todoItemIndex, title, description, dueDate, priority) {
-        
+    function editTodo(todoItemIndex, editedTitle, editedDescription, editedDueDate, editedPriority, editedProjectIndex, existingProjects) {
+        defaultProject[0].todoItems[todoItemIndex].title = editedTitle;
+        defaultProject[0].todoItems[todoItemIndex].description = editedDescription;
+        defaultProject[0].todoItems[todoItemIndex].dueDate = editedDueDate;
+        defaultProject[0].todoItems[todoItemIndex].priority = editedPriority;
+        defaultProject[0].todoItems[todoItemIndex].projectIndex = editedProjectIndex;
     }
 
-    function checkTodo(todoItemIndex){
-        defaultProject[0].todoItems[todoItemIndex].checklist === true?
-            defaultProject[0].todoItems[todoItemIndex].checklist = false:
-            defaultProject[0].todoItems[todoItemIndex].checklist = true;
-    }
+    // function checkTodo(todoItemIndex){
+    //     defaultProject[0].todoItems[todoItemIndex].checklist === true?
+    //         defaultProject[0].todoItems[todoItemIndex].checklist = false:
+    //         defaultProject[0].todoItems[todoItemIndex].checklist = true;
+
+        //updateTodoLists();
+    // }
 
     //Delete todo item from allTodo list, public method
-    function deleteTodo(todoItemIndex) {
-        defaultProject[0].todoItems.splice(todoItemIndex, 1);
-    }
+    // function deleteTodo(todoItemIndex) {
+    //     defaultProject[0].todoItems.splice(todoItemIndex, 1);
+
+        //updateTodoLists();
+    // }
 
     //Update defaultProject[0].todoItems. array when modified (when new todo item is created or deleted)
     // and then subarrays according to defaultProject[0].todoItems., private method
-    function updateTodoLists () {
+    function updateTodoLists (existingProjects) {
         //assign index number for identifying each unique item
-        for(let i=0; i<defaultProject[0].todoItems.length; i++) {
+        for(let i=0; i < defaultProject[0].todoItems.length; i++) {
             defaultProject[0].todoItems[i].itemIndex = i;
         }
         defaultProject[1].todoItems = defaultProject[0].todoItems.filter((todoItem) => isToday(todoItem.dueDate));
@@ -77,24 +88,20 @@ function manipulateTodo () {
         defaultProject[4].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.checklist === true);
         
         userProjects = [];
+        for (let j = 0; j < existingProjects.length; j++) {
+            const projectTodoArr = [];
+            userProjects.push(projectTodoArr);
+        }
         //FOR each item in the all todo item list
-        for (let j = 0; j < defaultProject[0].todoItems.length; j++) {
+        for (let k = 0; k < defaultProject[0].todoItems.length; k++) {
             //IF it has a project index
-            if (defaultProject[0].todoItems[j].projectIndex !== "") {
-                //AND IF there is no array already defined at the index of projectIndex
-                if (userProjects[defaultProject[0].todoItems[j].projectIndex] === undefined){
-                    //THEN create an empty array and add it into the userProjects array at the index of projectIndex
-                    const subArr = [];
-                    subArr.push(defaultProject[0].todoItems[j]);
-                    userProjects.splice(defaultProject[0].todoItems[j].projectIndex,0,subArr);
-                }
-                //ELSE just add it to the array inside of the userProjects array
-                else {
-                    userProjects[defaultProject[0].todoItems[j].projectIndex].push(defaultProject[0].todoItems[j]);
-                }
+            if (defaultProject[0].todoItems[k].projectIndex !== undefined) {
+                //THEN add it into the userProjects array at the index of projectIndex
+                userProjects.at(defaultProject[0].todoItems[k].projectIndex).push(defaultProject[0].todoItems[k]);
             }
         }
     }
+    
     
     const getDefaultProject = () => defaultProject;
 
@@ -105,8 +112,8 @@ function manipulateTodo () {
     return {
         createNewTodo,
         editTodo,
-        checkTodo,
-        deleteTodo,
+        //checkTodo,
+        //deleteTodo,
         updateTodoLists,
         getDefaultProject,
         getUserProject,

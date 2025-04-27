@@ -18,62 +18,98 @@ function eventHandler() {
         projectIndex:0,
     };
 
+    let editingMode = false;
+    let editTodoIndex;
+
     const addTodoBtn = document.querySelector("button#addTodo");
     const addProjectBtn = document.querySelector("button#addProject");
-    const todoForm = document.querySelector(".todoForm");
-    const todoDialog = document.querySelector("#newTodo");
-    const projectForm = document.querySelector(".projectForm");
-    const projectDialog = document.querySelector("#newProject");
+    const dialog = document.querySelector("dialog");
 
     //display empty todo form
-    addTodoBtn.addEventListener("click", () => todoDialog.showModal());
+    addTodoBtn.addEventListener("click", () => {
+        editingMode = false;
+        form.addNewTodoForm(projectsManipulator.getProjectList());
+        dialog.showModal();
+    })
 
     //display empty project form
-    addProjectBtn.addEventListener("click", () => projectDialog.showModal());
-
-    //todoForm buttons eventHandler
-    todoForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        todoManipulator.createNewTodo(...todoFormInput());
-        todoForm.reset();
-        todoDialog.close();
-        todoManipulator.updateTodoLists();
-        dashboard.displayTodos(getTodoItems(activeProject));
-        console.log(getTodoItems(activeProject));
+    addProjectBtn.addEventListener("click", () => {
+        form.addNewProjectForm();
+        dialog.showModal();
     })
 
-    //form cancel button general eventhandler 
-    const cancelBtns = document.querySelectorAll(".cancelBtn");
-    cancelBtns.forEach((button) => { 
-        button.addEventListener("click", (e) => {
-        const currentForm = e.target.parentElement.parentElement;
-        const currentDialog = currentForm.parentElement;
-        currentForm.reset();
-        currentDialog.close();})
-    })
+    dialog.addEventListener("click", (e) => {
+        const currentForm = dialog.querySelector("form");
 
-    //projectForm buttons eventHandler
-    projectForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        projectsManipulator.createProject(projectFormInput());
-        projectForm.reset();
-        projectDialog.close();
-        sidebar.updateProjectList(projectsManipulator.getProjectList());
-        form.updateFormDOM(projectsManipulator.getProjectList());
+        if (currentForm.classList.contains("newTodoForm")) {
+            if (e.target.type === "submit") {
+                currentForm.submit();
+                e.preventDefault();
+                todoManipulator.createNewTodo(...getTodoFormInput());
+                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
+                dashboard.displayTodos(getTodoItems(activeProject));
+                dialog.close();
+                dialog.textContent = "";
+            }
+            else if (e.target.classList.contains("cancelBtn")) {
+                dialog.close();
+                dialog.textContent = "";
+            }
+        }
+        else if (currentForm.classList.contains("projectForm")) {
+            if (e.target.type === "submit") {
+                currentForm.submit();
+                e.preventDefault();
+                projectsManipulator.createProject(getProjectFormInput());
+                sidebar.updateProjectList(projectsManipulator.getProjectList());
+                dialog.close();
+                dialog.textContent = "";
+            }
+            else if (e.target.classList.contains("cancelBtn")) {
+                dialog.close();
+                dialog.textContent = "";
+            }
+        }
+        else if (currentForm.classList.contains("editTodoForm")) {
+            if (e.target.type === "submit") {
+                todoManipulator.editTodo(editTodoIndex, ...getTodoFormInput());
+                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
+                dashboard.displayTodos(getTodoItems(activeProject));
+                dialog.close();
+                dialog.textContent = "";
+                editingMode = false;
+            }
+            else if (e.target.classList.contains("cancelBtn")) {
+                dialog.close();
+                dialog.textContent = "";
+                editingMode = false;
+            }
+        }
     })
 
     //formEventHandler
-    function todoFormInput () {
-        const title = document.getElementById("title").value;
-        const description = document.getElementById("description").value;
-        const dueDate = document.getElementById("dd").value;
-        const priority = document.getElementById("priority").value;
-        const projectIndex = parseInt(document.getElementById("project").value);
+    function getTodoFormInput () {
+        if (editingMode === false) {
+            const title = document.getElementById("newTitle").value;
+            const description = document.getElementById("newDescription").value;
+            const dueDate = document.getElementById("newDd").value;
+            const priority = document.getElementById("newPriority").value;
+            const projectIndex = parseInt(document.getElementById("newProject").value);
 
-        return [title, description, dueDate, priority, projectIndex];
+            return [title, description, dueDate, priority, projectIndex];
+        }
+        else if (editingMode === true) {
+            const title = document.getElementById("editTitle").value;
+            const description = document.getElementById("editDescription").value;
+            const dueDate = document.getElementById("editDd").value;
+            const priority = document.getElementById("editPriority").value;
+            const projectIndex = parseInt(document.getElementById("editProject").value);
+
+            return [title, description, dueDate, priority, projectIndex];
+        }
     }
 
-    function projectFormInput () {
+    function getProjectFormInput () {
         const projectTitle = document.getElementById("projectTitle").value;
 
         return projectTitle;
@@ -123,8 +159,23 @@ function eventHandler() {
         }
         else if (projectType === "user-defined") {
             const project = todoManipulator.getUserProject();
-            return project[projectIndex] !== undefined? project[projectIndex]: [];
+            return project[projectIndex];
         }
     }
+
+    //todo itembox handler
+    const todoDisplayBoard = document.getElementById("todos");
+    //show form with existing details
+
+    todoDisplayBoard.addEventListener("click", (e) => {
+        if (e.target.classList.contains("todoDetails")) {
+            editingMode = true;
+            const existingProjects = projectsManipulator.getProjectList();
+            const existingAllTodos = todoManipulator.getDefaultProject().at(0).todoItems;
+            editTodoIndex = parseInt(e.target.parentNode.dataset.itemIndex);
+            form.addEditTodoForm(existingProjects, existingAllTodos[editTodoIndex]);
+            dialog.showModal();
+        }
+    })
 
 }
