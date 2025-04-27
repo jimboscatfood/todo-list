@@ -42,8 +42,7 @@ function eventHandler() {
         const currentForm = dialog.querySelector("form");
 
         if (currentForm.classList.contains("newTodoForm")) {
-            if (e.target.type === "submit") {
-                currentForm.submit();
+            if (e.target.type === "submit" && currentForm.checkValidity()) {
                 e.preventDefault();
                 todoManipulator.createNewTodo(...getTodoFormInput());
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
@@ -57,8 +56,7 @@ function eventHandler() {
             }
         }
         else if (currentForm.classList.contains("projectForm")) {
-            if (e.target.type === "submit") {
-                currentForm.submit();
+            if (e.target.type === "submit" && currentForm.checkValidity()) {
                 e.preventDefault();
                 projectsManipulator.createProject(getProjectFormInput());
                 sidebar.updateProjectList(projectsManipulator.getProjectList());
@@ -71,7 +69,8 @@ function eventHandler() {
             }
         }
         else if (currentForm.classList.contains("editTodoForm")) {
-            if (e.target.type === "submit") {
+            if (e.target.type === "submit" && currentForm.checkValidity()) {
+                e.preventDefault();
                 todoManipulator.editTodo(editTodoIndex, ...getTodoFormInput());
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
                 dashboard.displayTodos(getTodoItems(activeProject));
