@@ -92,12 +92,13 @@ function manipulateTodo () {
         }
         //FOR each item in the all todo item list
         for (let k = 0; k < defaultProject[0].todoItems.length; k++) {
-            //IF it has a project index
-            if (defaultProject[0].todoItems[k].projectIndex !== undefined && existingProjects.length > 0) {
+            //IF it has a project index and the number of user-defined project is not zero
+            if (defaultProject[0].todoItems[k].projectIndex !== "" && existingProjects.length > 0) {
                 //THEN add it into the userProjects array at the index of projectIndex
                 userProjects.at(defaultProject[0].todoItems[k].projectIndex).push(defaultProject[0].todoItems[k]);
             }
         }
+        console.log(getDefaultProject());
     }
     
     

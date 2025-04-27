@@ -94,7 +94,7 @@ function eventHandler() {
             const description = document.getElementById("newDescription").value;
             const dueDate = document.getElementById("newDd").value;
             const priority = document.getElementById("newPriority").value;
-            const projectIndex = parseInt(document.getElementById("newProject").value);
+            const projectIndex = document.getElementById("newProject").value;
 
             return [title, description, dueDate, priority, projectIndex];
         }
@@ -103,7 +103,7 @@ function eventHandler() {
             const description = document.getElementById("editDescription").value;
             const dueDate = document.getElementById("editDd").value;
             const priority = document.getElementById("editPriority").value;
-            const projectIndex = parseInt(document.getElementById("editProject").value);
+            const projectIndex = document.getElementById("editProject").value;
 
             return [title, description, dueDate, priority, projectIndex];
         }
