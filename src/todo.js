@@ -1,10 +1,7 @@
 //This js file will contain a module that keeps track of the todo item info in the dashboard
-import {isToday, parse} from "date-fns";
-
+import {isToday} from "date-fns";
 
 export default manipulateTodo; 
-
-import manipulateProjects from "./project";
 
 //Create a module for creating new todo items object
 //todo-items should have a title, description, dueDate and priority
@@ -81,7 +78,7 @@ function manipulateTodo () {
             defaultProject[0].todoItems[i].itemIndex = i;
         }
         defaultProject[1].todoItems = defaultProject[0].todoItems.filter((todoItem) => isToday(todoItem.dueDate));
-        defaultProject[2].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.dueDate !== undefined);
+        defaultProject[2].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.dueDate !== "");
         defaultProject[3].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.priority === "high");
         defaultProject[4].todoItems = defaultProject[0].todoItems.filter((todoItem) => todoItem.checklist === true);
         
