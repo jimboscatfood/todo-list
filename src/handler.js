@@ -60,6 +60,7 @@ function eventHandler() {
                 e.preventDefault();
                 projectsManipulator.createProject(getProjectFormInput());
                 sidebar.updateProjectList(projectsManipulator.getProjectList());
+                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
                 dialog.close();
                 dialog.textContent = "";
             }
