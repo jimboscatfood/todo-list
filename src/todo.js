@@ -65,15 +65,13 @@ function manipulateTodo () {
     //         defaultProject[0].todoItems[todoItemIndex].checklist = false:
     //         defaultProject[0].todoItems[todoItemIndex].checklist = true;
 
-        //updateTodoLists();
     // }
 
-    //Delete todo item from allTodo list, public method
-    // function deleteTodo(todoItemIndex) {
-    //     defaultProject[0].todoItems.splice(todoItemIndex, 1);
+    //Delete todo item from allTodo list
+    function deleteTodo(todoItemIndex) {
+        defaultProject[0].todoItems.splice(todoItemIndex, 1);
 
-        //updateTodoLists();
-    // }
+    }
 
     //Update defaultProject[0].todoItems. array when modified (when new todo item is created or deleted)
     // and then subarrays according to defaultProject[0].todoItems., private method
@@ -95,7 +93,7 @@ function manipulateTodo () {
         //FOR each item in the all todo item list
         for (let k = 0; k < defaultProject[0].todoItems.length; k++) {
             //IF it has a project index
-            if (defaultProject[0].todoItems[k].projectIndex !== undefined) {
+            if (defaultProject[0].todoItems[k].projectIndex !== undefined && existingProjects.length > 0) {
                 //THEN add it into the userProjects array at the index of projectIndex
                 userProjects.at(defaultProject[0].todoItems[k].projectIndex).push(defaultProject[0].todoItems[k]);
             }
@@ -113,7 +111,7 @@ function manipulateTodo () {
         createNewTodo,
         editTodo,
         //checkTodo,
-        //deleteTodo,
+        deleteTodo,
         updateTodoLists,
         getDefaultProject,
         getUserProject,

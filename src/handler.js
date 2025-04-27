@@ -175,6 +175,15 @@ function eventHandler() {
             form.addEditTodoForm(existingProjects, existingAllTodos[editTodoIndex]);
             dialog.showModal();
         }
+        else if (e.target.classList.contains("deleteTodo")) {
+            if (confirm("Remove this todo item permanently?")) {
+                const deleteTodoIndex = parseInt(e.target.parentNode.dataset.itemIndex);
+                todoManipulator.deleteTodo(deleteTodoIndex);
+                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
+                dashboard.displayTodos(getTodoItems(activeProject))
+            }
+            
+        }
     })
 
 }
