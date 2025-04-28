@@ -69,6 +69,10 @@ body {
 header {
   border-bottom: 2px solid #F8F8FF;
   flex:0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 header h1 {
@@ -95,23 +99,22 @@ div#ui {
     flex:1 0 auto;
 }
 
-section {
-  padding:0 30px;
+nav > section {
+  padding:20px 0px 20px 30px;
 }
 
 div#ui > nav {
-    flex:1 0 auto; 
     border-right:2px solid #F8F8FF;
     display:flex;
     flex-direction: column;
-    gap:40px;
     height:100%;
+    width:250px;
 }
 
 nav > section > h2 {
-  font-size: 2.5rem;
-  
+  font-size: 2.5rem; 
 }
+
 
 
 button#addProject, button#addTodo {
@@ -126,12 +129,14 @@ button#addProject, button#addTodo {
 }
 
 button#addTodo {
-  margin-left: 30px;
+  margin-right:40px;
 }
 
 button#addProject:hover, button#addTodo:hover {
   color:black;
   background-color:#F8F8FF;
+  cursor: pointer;
+
 }
 
 form button:hover {
@@ -144,31 +149,68 @@ nav button:hover {
 }
 
 /* Todo itembox styling */
-div#ui > div {
+div#ui > div#todos {
   display: flex;
   flex-direction: column;
-  flex: 20 1 auto;
-  padding: 30px;
+  flex:20 1 auto;
+  align-items: center;
+  padding-top:40px;
+  gap:30px;
 }
 
 .itemBox {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
     align-items: center;
-    border: 2px solid black;
+    border: 1px solid black;
+    background-color:#F8F8FF;
+    border-radius: 5px;
+    color:black;
+    width:80%;
+    padding:1rem;
 }
 
-.editTodo {
-    background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>file-edit-outline</title><path d="M10 20H6V4H13V9H18V12.1L20 10.1V8L14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H10V20M20.2 13C20.3 13 20.5 13.1 20.6 13.2L21.9 14.5C22.1 14.7 22.1 15.1 21.9 15.3L20.9 16.3L18.8 14.2L19.8 13.2C19.9 13.1 20 13 20.2 13M20.2 16.9L14.1 23H12V20.9L18.1 14.8L20.2 16.9Z" /></svg>');
-    width:50px;
-    height:50px;
+.itemBox > input[type="checkbox"] {
+    transform:scale(2);
+    
+}
+
+.itemBox > h3 {
+    padding-left:50px;
+    width: 50%;
+}
+
+.itemBox > p {
+    width:30%;
+}
+
+.itemBox > button.todoDetails {
+    height:30px;
+    width:70px;
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.itemBox > button.todoDetails:hover {
+  background-color: bisque;
+  
+}
+
+.itemBox > button.deleteTodo {
+  min-height:30px;
+  min-width:30px;
+  border:none;
+  background-color: transparent;
+}
+
+.itemBox > button:hover {
+  cursor: pointer;
+  
 }
 
 .deleteTodo {
     background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>trash-can-outline</title><path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" /></svg>');
-    width:50px;
-    height:50px;
+    background-repeat: no-repeat;
 }
 
 
