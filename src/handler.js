@@ -46,7 +46,7 @@ function eventHandler() {
                 e.preventDefault();
                 todoManipulator.createNewTodo(...getTodoFormInput());
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(getTodoItems(activeProject));
+                dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject));
                 dialog.close();
                 dialog.textContent = "";
             }
@@ -74,7 +74,7 @@ function eventHandler() {
                 e.preventDefault();
                 todoManipulator.editTodo(editTodoIndex, ...getTodoFormInput());
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(getTodoItems(activeProject));
+                dashboard.displayTodos(getProjectTitle(activeProject), getTodoItems(activeProject));
                 dialog.close();
                 dialog.textContent = "";
                 editingMode = false;
@@ -124,7 +124,7 @@ function eventHandler() {
     navbar.addEventListener("click", (e) => {
             if (e.target.tagName === "BUTTON" && e.target.classList.contains("projectBtn")) {
                 changeActiveProject(e.target);
-                dashboard.displayTodos(getTodoItems(activeProject));
+                dashboard.displayTodos(getProjectTitle(activeProject), getTodoItems(activeProject));
             }
     })
 
@@ -163,6 +163,17 @@ function eventHandler() {
         }
     }
 
+    function getProjectTitle ({projectType, projectIndex}) {
+        if (projectType === "default") {
+            const project = todoManipulator.getDefaultProject();
+            return project[projectIndex].name;
+        }
+        else if (projectType === "user-defined") {
+            const project = projectsManipulator.getProjectList();
+            return project[projectIndex].name;
+        }
+    }
+
     //todo itembox handler
     const todoDisplayBoard = document.getElementById("todos");
     //show form with existing details
@@ -181,7 +192,7 @@ function eventHandler() {
                 const deleteTodoIndex = parseInt(e.target.parentNode.dataset.itemIndex);
                 todoManipulator.deleteTodo(deleteTodoIndex);
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(getTodoItems(activeProject))
+                dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject))
             }
             
         }

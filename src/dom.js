@@ -16,10 +16,16 @@ function initialiseDOM () {
 
 function dashboardDOM() {
     const todosContent = document.querySelector("div#todos");
-
-    function displayTodos(todoArr) {
+    //projectTitle is string, todoArr is array
+    function displayTodos(projectTitle, todoArr) {
         //Clear page first
         todosContent.textContent = "";
+
+        const pageTitle = document.createElement("h2");
+        pageTitle.textContent = projectTitle;
+        pageTitle.classList.add("projectTitle");
+        todosContent.appendChild(pageTitle);
+
         todoArr.forEach((todoItem) => {
             const itemBox = document.createElement("div");
             itemBox.setAttribute("data-item-index", todoItem.itemIndex);
