@@ -166,8 +166,10 @@ div#ui > div#todos {
     background-color:#F8F8FF;
     border-radius: 5px;
     color:black;
-    width:80%;
+    width:70%;
     padding:1rem;
+    flex-wrap: wrap;
+    gap:40px;
 }
 
 .itemBox > input[type="checkbox"] {
@@ -177,11 +179,11 @@ div#ui > div#todos {
 
 .itemBox > h3 {
     padding-left:50px;
-    width: 50%;
+    min-width: 40%;
 }
 
 .itemBox > p {
-    width:30%;
+    min-width:20%;
 }
 
 .itemBox > button.todoDetails {
