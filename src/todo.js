@@ -44,7 +44,7 @@ function manipulateTodo () {
             dueDate, //date (string type)
             priority, //string type
             projectIndex,
-            checklist: undefined,//boolean type: true/ false,
+            checklist: false,//boolean type: true/ false,
         };
         defaultProject[0].todoItems.push(newTodo);
     }
@@ -57,12 +57,12 @@ function manipulateTodo () {
         defaultProject[0].todoItems[todoItemIndex].projectIndex = editedProjectIndex;
     }
 
-    // function checkTodo(todoItemIndex){
-    //     defaultProject[0].todoItems[todoItemIndex].checklist === true?
-    //         defaultProject[0].todoItems[todoItemIndex].checklist = false:
-    //         defaultProject[0].todoItems[todoItemIndex].checklist = true;
+    function checkTodo(todoItemIndex){
+        defaultProject[0].todoItems[todoItemIndex].checklist === true?
+            defaultProject[0].todoItems[todoItemIndex].checklist = false:
+            defaultProject[0].todoItems[todoItemIndex].checklist = true;
 
-    // }
+    }
 
     //Delete todo item from allTodo list
     function deleteTodo(todoItemIndex) {
@@ -95,7 +95,7 @@ function manipulateTodo () {
                 userProjects.at(defaultProject[0].todoItems[k].projectIndex).push(defaultProject[0].todoItems[k]);
             }
         }
-        console.log(getDefaultProject());
+        
     }
     
     
@@ -108,7 +108,7 @@ function manipulateTodo () {
     return {
         createNewTodo,
         editTodo,
-        //checkTodo,
+        checkTodo,
         deleteTodo,
         updateTodoLists,
         getDefaultProject,

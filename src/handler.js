@@ -102,7 +102,6 @@ function eventHandler() {
             const title = document.getElementById("editTitle").value;
             const description = document.getElementById("editDescription").value;
             const dueDate = document.getElementById("editDd").value;
-            const priority = document.getElementById("editPriority").value;
             const projectIndex = document.getElementById("editProject").value;
 
             return [title, description, dueDate, priority, projectIndex];
@@ -179,23 +178,26 @@ function eventHandler() {
     //show form with existing details
 
     todoDisplayBoard.addEventListener("click", (e) => {
+        editTodoIndex = parseInt(e.target.parentNode.dataset.itemIndex);
         if (e.target.classList.contains("todoDetails")) {
             editingMode = true;
             const existingProjects = projectsManipulator.getProjectList();
             const existingAllTodos = todoManipulator.getDefaultProject().at(0).todoItems;
-            editTodoIndex = parseInt(e.target.parentNode.dataset.itemIndex);
             form.addEditTodoForm(existingProjects, existingAllTodos[editTodoIndex]);
             dialog.showModal();
         }
         else if (e.target.classList.contains("deleteTodo")) {
             if (confirm("Remove this todo item permanently?")) {
-                const deleteTodoIndex = parseInt(e.target.parentNode.dataset.itemIndex);
-                todoManipulator.deleteTodo(deleteTodoIndex);
+                todoManipulator.deleteTodo(editTodoIndex);
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject))
+                dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject));
             }
-            
+        }
+        else if (e.target.type === "checkbox") {
+            todoManipulator.checkTodo(editTodoIndex);
+            todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
+            dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject));
         }
     })
-
 }
+
