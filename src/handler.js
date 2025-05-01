@@ -102,9 +102,10 @@ function eventHandler() {
             const title = document.getElementById("editTitle").value;
             const description = document.getElementById("editDescription").value;
             const dueDate = document.getElementById("editDd").value;
+            const priority = document.getElementById("editPriority").value;
             const projectIndex = document.getElementById("editProject").value;
 
-            return [title, description, dueDate, projectIndex];
+            return [title, description, dueDate, priority, projectIndex];
         }
     }
 
@@ -198,7 +199,8 @@ function eventHandler() {
             else if (e.target.classList.contains("deleteProject")) {
                 if (confirm("Remove this project?")) {
                     projectsManipulator.deleteProject(activeProject.projectIndex);
-                    sidebar.updateProjectList(projectsManipulator.getProjectList);
+                    todoManipulator.updateTodoProjectIndex(activeProject);
+                    sidebar.updateProjectList(projectsManipulator.getProjectList());
                     activeProject.projectIndex = 0;
                     activeProject.projectType = "default";
                 }

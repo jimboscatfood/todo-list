@@ -37,7 +37,7 @@ function manipulateTodo () {
     let userProjects = [];
 
     //Create new todo item, public method
-    function createNewTodo(title, description, dueDate, priority, projectIndex, existingProjects) {
+    function createNewTodo(title, description, dueDate, priority, projectIndex) {
         const newTodo = {
             title, //string type
             description, //string
@@ -94,10 +94,19 @@ function manipulateTodo () {
                 //THEN add it into the userProjects array at the index of projectIndex
                 userProjects.at(defaultProject[0].todoItems[k].projectIndex).push(defaultProject[0].todoItems[k]);
             }
-        }
-        
+        }   
     }
     
+    function updateTodoProjectIndex (activeProject) {
+        for (let i = 0; i < defaultProject[0].todoItems.length; i++) {
+            //IF the todo item projectIndex property is larger or equal to activeProject when it is being deleted
+            if (defaultProject[0].todoItems[i].projectIndex >= activeProject.projectIndex) {
+                //THEN take 1 off the projectIndex
+                defaultProject[0].todoItems[i].projectIndex -= 1;
+            }
+        }
+    }
+
     
     const getDefaultProject = () => defaultProject;
 
@@ -113,6 +122,7 @@ function manipulateTodo () {
         updateTodoLists,
         getDefaultProject,
         getUserProject,
+        updateTodoProjectIndex,
     }
 }
 
