@@ -46,7 +46,7 @@ function eventHandler() {
                 e.preventDefault();
                 todoManipulator.createNewTodo(...getTodoFormInput());
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject));
+                dashboard.displayTodos(activeProject,getProjectTitle(activeProject),getTodoItems(activeProject));
                 dialog.close();
                 dialog.textContent = "";
             }
@@ -74,7 +74,7 @@ function eventHandler() {
                 e.preventDefault();
                 todoManipulator.editTodo(editTodoIndex, ...getTodoFormInput());
                 todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(getProjectTitle(activeProject), getTodoItems(activeProject));
+                dashboard.displayTodos(activeProject,getProjectTitle(activeProject), getTodoItems(activeProject));
                 dialog.close();
                 dialog.textContent = "";
                 editingMode = false;
@@ -104,7 +104,7 @@ function eventHandler() {
             const dueDate = document.getElementById("editDd").value;
             const projectIndex = document.getElementById("editProject").value;
 
-            return [title, description, dueDate, priority, projectIndex];
+            return [title, description, dueDate, projectIndex];
         }
     }
 
@@ -123,7 +123,7 @@ function eventHandler() {
     navbar.addEventListener("click", (e) => {
             if (e.target.tagName === "BUTTON" && e.target.classList.contains("projectBtn")) {
                 changeActiveProject(e.target);
-                dashboard.displayTodos(getProjectTitle(activeProject), getTodoItems(activeProject));
+                dashboard.displayTodos(activeProject,getProjectTitle(activeProject), getTodoItems(activeProject));
             }
     })
 
@@ -186,18 +186,25 @@ function eventHandler() {
             form.addEditTodoForm(existingProjects, existingAllTodos[editTodoIndex]);
             dialog.showModal();
         }
-        else if (e.target.classList.contains("deleteTodo")) {
-            if (confirm("Remove this todo item permanently?")) {
-                todoManipulator.deleteTodo(editTodoIndex);
-                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject));
+        else {
+            if (e.target.classList.contains("deleteTodo")) {
+                if (confirm("Remove this todo item permanently?")) {
+                    todoManipulator.deleteTodo(editTodoIndex);
+                }
             }
-        }
-        else if (e.target.type === "checkbox") {
-            todoManipulator.checkTodo(editTodoIndex);
+            else if (e.target.type === "checkbox") {
+                todoManipulator.checkTodo(editTodoIndex);
+            }
+            else if (e.target.classList.contains("deleteProject")) {
+                if (confirm("Remove this project?")) {
+                    projectsManipulator.deleteProject(activeProject.projectIndex);
+                    sidebar.updateProjectList(projectsManipulator.getProjectList);
+                    activeProject.projectIndex = 0;
+                    activeProject.projectType = "default";
+                }
+            }
             todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-            dashboard.displayTodos(getProjectTitle(activeProject),getTodoItems(activeProject));
+            dashboard.displayTodos(activeProject,getProjectTitle(activeProject),getTodoItems(activeProject));
         }
     })
 }
-

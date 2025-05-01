@@ -12,7 +12,9 @@ function manipulateProjects() {
         projects.push(newProject);
     }
 
-    function deleteProject () {}
+    function deleteProject (projectIndex) {
+        projects.splice(projectIndex,1);
+    }
 
     function updateProjectIndex () {
         projects.forEach((project, index) => {
@@ -27,5 +29,6 @@ function manipulateProjects() {
         createProject,
         updateProjectIndex,
         getProjectList,
+        deleteProject,
     }
 }

@@ -17,7 +17,7 @@ function initialiseDOM () {
 function dashboardDOM() {
     const todosContent = document.querySelector("div#todos");
     //projectTitle is string, todoArr is array
-    function displayTodos(projectTitle, todoArr) {
+    function displayTodos(activeProject, projectTitle, todoArr) {
         //Clear page first
         todosContent.textContent = "";
 
@@ -25,6 +25,17 @@ function dashboardDOM() {
         pageTitle.textContent = projectTitle;
         pageTitle.classList.add("projectTitle");
         todosContent.appendChild(pageTitle);
+
+        if (todoArr.length === 0 && activeProject.projectType === "user-defined") {
+            const message = document.createElement("p");
+            message.textContent = "You don't have any outstanding task in this project";
+
+            const deleteProjectBtn = document.createElement("button");
+            deleteProjectBtn.classList.add("deleteProject");
+            deleteProjectBtn.textContent = "Delete Project";
+
+            todosContent.append(message, deleteProjectBtn);
+        }
 
         todoArr.forEach((todoItem) => {
             const itemBox = document.createElement("div");
@@ -53,8 +64,6 @@ function dashboardDOM() {
             itemBox.append(checkbox, todoTitle, todoDueDate, detailsButton, deleteButton);
         })
     }
-
-
         return {
             displayTodos,
         }
