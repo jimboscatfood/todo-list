@@ -9,8 +9,8 @@ const dialog = document.createElement("dialog");
 function initialiseDOM () {
     ui.appendChild(dialog);
 
-    const todo = manipulateTodo();
     const sidebar = sidebarDOM();
+    const todo = manipulateTodo();
     sidebar.addDefaultProjects(todo.getDefaultProject());
 }
 

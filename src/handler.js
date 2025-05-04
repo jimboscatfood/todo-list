@@ -3,23 +3,46 @@ import "./styles.css";
 import { dashboardDOM, formDOM, sidebarDOM} from "./dom";
 import manipulateTodo from "./todo";
 import manipulateProjects from "./project";
+import storage from "./storage";
 
 export default eventHandler;
 
-const todoManipulator = manipulateTodo();
-const projectsManipulator = manipulateProjects();
-const dashboard = dashboardDOM();
-const form = formDOM();
-const sidebar = sidebarDOM();
-
 function eventHandler() {
+    const todoManipulator = manipulateTodo();
+    const projectsManipulator = manipulateProjects();
+    const dashboard = dashboardDOM();
+    const form = formDOM();
+    const sidebar = sidebarDOM();
+    const storageManipulator = storage();
+
+    let editingMode = false;
+    let editTodoIndex;
     let activeProject = {
         projectType:"default",
         projectIndex:0,
     };
 
-    let editingMode = false;
-    let editTodoIndex;
+    const existingProjects = () => projectsManipulator.getProjectList();
+    const allTodoItems = () => todoManipulator.getAllTodoItems();
+    const activeProjectTitle = (activeProject) => getProjectTitle(activeProject);
+    const activeTodoItems = (activeProject) => getTodoItems(activeProject);
+    
+    const localStorageArr = storageManipulator.getStorage();
+      
+
+    //display localStorage data when DOM content load, mainly project sidebar and todo dashboard
+
+    window.addEventListener("DOMContentLoaded", () => {
+        if (localStorageArr[0] !== null || localStorageArr[1] !== null || localStorageArr[2] !== null) {
+            todoManipulator.setAllTodoItems(localStorageArr[0]);
+            projectsManipulator.setProjectList(localStorageArr[1]);
+            activeProject = localStorageArr[2];
+            todoManipulator.updateTodoLists(existingProjects());
+        }
+        dashboard.displayTodos(activeProject,activeProjectTitle(activeProject),activeTodoItems(activeProject));
+        sidebar.updateProjectList(existingProjects());
+    })
+
 
     const addTodoBtn = document.querySelector("button#addTodo");
     const addProjectBtn = document.querySelector("button#addProject");
@@ -28,7 +51,7 @@ function eventHandler() {
     //display empty todo form
     addTodoBtn.addEventListener("click", () => {
         editingMode = false;
-        form.addNewTodoForm(projectsManipulator.getProjectList());
+        form.addNewTodoForm(existingProjects());
         dialog.showModal();
     })
 
@@ -45,8 +68,8 @@ function eventHandler() {
             if (e.target.type === "submit" && currentForm.checkValidity()) {
                 e.preventDefault();
                 todoManipulator.createNewTodo(...getTodoFormInput());
-                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(activeProject,getProjectTitle(activeProject),getTodoItems(activeProject));
+                todoManipulator.updateTodoLists(existingProjects());
+                dashboard.displayTodos(activeProject,activeProjectTitle(activeProject),activeTodoItems(activeProject));
                 dialog.close();
                 dialog.textContent = "";
             }
@@ -59,8 +82,8 @@ function eventHandler() {
             if (e.target.type === "submit" && currentForm.checkValidity()) {
                 e.preventDefault();
                 projectsManipulator.createProject(getProjectFormInput());
-                sidebar.updateProjectList(projectsManipulator.getProjectList());
-                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
+                sidebar.updateProjectList(existingProjects());
+                todoManipulator.updateTodoLists(existingProjects());
                 dialog.close();
                 dialog.textContent = "";
             }
@@ -73,8 +96,8 @@ function eventHandler() {
             if (e.target.type === "submit" && currentForm.checkValidity()) {
                 e.preventDefault();
                 todoManipulator.editTodo(editTodoIndex, ...getTodoFormInput());
-                todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-                dashboard.displayTodos(activeProject,getProjectTitle(activeProject), getTodoItems(activeProject));
+                todoManipulator.updateTodoLists(existingProjects());
+                dashboard.displayTodos(activeProject,activeProjectTitle(activeProject), activeTodoItems(activeProject));
                 dialog.close();
                 dialog.textContent = "";
                 editingMode = false;
@@ -85,6 +108,7 @@ function eventHandler() {
                 editingMode = false;
             }
         }
+        storageManipulator.setStorage(allTodoItems(),existingProjects(),activeProject)
     })
 
     //formEventHandler
@@ -124,7 +148,7 @@ function eventHandler() {
     navbar.addEventListener("click", (e) => {
             if (e.target.tagName === "BUTTON" && e.target.classList.contains("projectBtn")) {
                 changeActiveProject(e.target);
-                dashboard.displayTodos(activeProject,getProjectTitle(activeProject), getTodoItems(activeProject));
+                dashboard.displayTodos(activeProject,activeProjectTitle(activeProject), activeTodoItems(activeProject));
             }
     })
 
@@ -148,11 +172,12 @@ function eventHandler() {
                     }
                 })
             }
+            storageManipulator.setStorage(allTodoItems(),existingProjects(),activeProject);
         }
     
 
     //return a specific array based on 1. project type (default/ user-defined) 2. project index
-    function getTodoItems({projectType, projectIndex}) {
+    function getTodoItems ({projectType, projectIndex}) {
         if (projectType === "default") {
             const project = todoManipulator.getDefaultProject();
             return project[projectIndex].todoItems;
@@ -169,7 +194,7 @@ function eventHandler() {
             return project[projectIndex].name;
         }
         else if (projectType === "user-defined") {
-            const project = projectsManipulator.getProjectList();
+            const project = existingProjects();
             return project[projectIndex].name;
         }
     }
@@ -182,9 +207,7 @@ function eventHandler() {
         editTodoIndex = parseInt(e.target.parentNode.dataset.itemIndex);
         if (e.target.classList.contains("todoDetails")) {
             editingMode = true;
-            const existingProjects = projectsManipulator.getProjectList();
-            const existingAllTodos = todoManipulator.getDefaultProject().at(0).todoItems;
-            form.addEditTodoForm(existingProjects, existingAllTodos[editTodoIndex]);
+            form.addEditTodoForm(existingProjects(), allTodoItems()[editTodoIndex]);
             dialog.showModal();
         }
         else {
@@ -200,13 +223,14 @@ function eventHandler() {
                 if (confirm("Remove this project?")) {
                     projectsManipulator.deleteProject(activeProject.projectIndex);
                     todoManipulator.updateTodoProjectIndex(activeProject);
-                    sidebar.updateProjectList(projectsManipulator.getProjectList());
+                    sidebar.updateProjectList(existingProjects());
                     activeProject.projectIndex = 0;
                     activeProject.projectType = "default";
                 }
             }
-            todoManipulator.updateTodoLists(projectsManipulator.getProjectList());
-            dashboard.displayTodos(activeProject,getProjectTitle(activeProject),getTodoItems(activeProject));
+            todoManipulator.updateTodoLists(existingProjects());
+            dashboard.displayTodos(activeProject,activeProjectTitle(activeProject),activeTodoItems(activeProject));
+            storageManipulator.setStorage(allTodoItems(),existingProjects(),activeProject);
         }
     })
 }

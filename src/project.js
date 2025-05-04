@@ -1,7 +1,9 @@
+import storage from "./storage";
+
 export default manipulateProjects;
 
 function manipulateProjects() {
-    const projects = [];
+    let projects = [];
 
     function createProject(projectName) {
         const newProject = {
@@ -16,19 +18,17 @@ function manipulateProjects() {
         projects.splice(projectIndex,1);
     }
 
-    function updateProjectIndex () {
-        projects.forEach((project, index) => {
-            project.projectIndex = index;
-        });
-    }
-
     const getProjectList = () => projects;
+
+    const setProjectList = (storageProjects) => {
+        projects = storageProjects;
+    }
     
 
     return {
         createProject,
-        updateProjectIndex,
         getProjectList,
         deleteProject,
+        setProjectList,
     }
 }

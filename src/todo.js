@@ -112,7 +112,11 @@ function manipulateTodo () {
 
     const getUserProject = () => userProjects;
 
-    
+    const getAllTodoItems = () => defaultProject[0].todoItems;
+
+    const setAllTodoItems = (storageAllTodos) => {
+        defaultProject[0].todoItems = storageAllTodos;
+    };
 
     return {
         createNewTodo,
@@ -123,6 +127,8 @@ function manipulateTodo () {
         getDefaultProject,
         getUserProject,
         updateTodoProjectIndex,
+        setAllTodoItems,
+        getAllTodoItems,
     }
 }
 
