@@ -31,7 +31,6 @@ function eventHandler() {
       
 
     //display localStorage data when DOM content load, mainly project sidebar and todo dashboard
-
     window.addEventListener("DOMContentLoaded", () => {
         if (localStorageArr[0] !== null || localStorageArr[1] !== null || localStorageArr[2] !== null) {
             todoManipulator.setAllTodoItems(localStorageArr[0]);

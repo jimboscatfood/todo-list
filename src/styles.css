@@ -117,14 +117,14 @@ nav > section > h2 {
 
 
 
-button#addProject, button#addTodo {
+button#addProject, button#addTodo, button.deleteProject {
   background-color: transparent;
   font-size: 1.3rem;
   color:#F8F8FF;
   border:1px solid #F8F8FF;
   border-radius: 5px;
-  padding:5px;
-  width:140px;
+  padding:5px 15px;
+  width:max-content;
   font-weight: 700;
 }
 
@@ -132,7 +132,7 @@ button#addTodo {
   margin-right:40px;
 }
 
-button#addProject:hover, button#addTodo:hover {
+button#addProject:hover, button#addTodo:hover, button.deleteProject:hover {
   color:black;
   background-color:#F8F8FF;
   cursor: pointer;
@@ -215,4 +215,12 @@ div#ui > div#todos {
     background-repeat: no-repeat;
 }
 
+div#todos > h2 {
+  text-align: center;
+  font-size: 2rem;
+  border-bottom: 1px solid #F8F8FF;
+}
 
+div#todos > p {
+  font-size: 1.5rem;
+}

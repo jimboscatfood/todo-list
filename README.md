@@ -11,4 +11,14 @@ Set up:
 5. Create the entry point index.js for modules to be imported
 6. Start coding in the src folder, note that todos elements should be added dynamically by js
 
+DOM logic:
+1. Set up separate modules for handling different part of application logic,
+for example, a module is set for manipulating todo item info and another should be set up 
+for manipulating DOM
 
+
+Module logic:
+1. Draw up the basic architecture of the webpage:
+    One webpage: index.js
+    Three parts of layout: header, sidebar, dashboard
+    Two components to be generated dynamically: New project in sidebar, todo items in dashboard
